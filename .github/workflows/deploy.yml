@@ -1,0 +1,32 @@
+# .github/workflows/pr-template.yml
+name: Add Interactive PR Template
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  add-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Add Template Link
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const repo = context.repo;
+            
+            const templateUrl = 'https://yourusername.github.io/interactive-pr-template/';
+            
+            const comment = `## 📝 Interactive PR Template Available\n\nPlease use our [Interactive PR Template](${templateUrl}) to create a well-structured description for this PR.\n\n1. Fill out the form\n2. Generate your description\n3. Copy and paste it here\n\nThank you for your contribution!`;
+            
+            await github.rest.issues.createComment({
+              owner: repo.owner,
+              repo: repo.repo,
+              issue_number: prNumber,
+              body: comment
+            });
