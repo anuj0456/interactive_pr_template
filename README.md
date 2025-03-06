@@ -10,7 +10,7 @@ The Interactive PR Template provides a simple form interface that guides develop
 
 ## Usage
 
-1. Visit [https://anuj0456.github.io/interactive-pr-template](https://anuj0456.github.io/interactive_pr_template)
+1. Visit [https://interactive-pr-template.vercel.app](https://interactive-pr-template.vercel.app)
 2. Fill out the form with your PR details
 3. Click "Generate Markdown" for a complete template or "Short Summary" for a concise version
 4. Copy the generated output using the "Copy to Clipboard" button
