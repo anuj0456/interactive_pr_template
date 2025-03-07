@@ -1,320 +1,509 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Interactive PR Template</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            color: #0366d6;
-            border-bottom: 1px solid #eaecef;
-            padding-bottom: 10px;
-        }
-        h2 {
-            color: #24292e;
-            margin-top: 24px;
-        }
-        label {
-            display: block;
-            margin-top: 12px;
-            font-weight: 600;
-        }
-        input[type="text"], textarea, select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 6px;
-            margin-bottom: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        .checkbox-container {
-            margin-bottom: 5px;
-        }
-        .submit-btn {
-            background-color: #2ea44f;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .submit-btn:hover {
-            background-color: #2c974b;
-        }
-        .copy-btn {
-            background-color: #0366d6;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
-        }
-        .copy-btn:hover {
-            background-color: #0256bf;
-        }
-        .summary-btn {
-            background-color: #6f42c1;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
-        }
-        .summary-btn:hover {
-            background-color: #5a32a3;
-        }
-        .button-group {
-            margin-top: 20px;
-        }
-        #output {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f6f8fa;
-            white-space: pre-wrap;
-            display: none;
-        }
-        .section {
-            background-color: #f6f8fa;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-        }
-        .output-mode-selector {
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
-        }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      h1 {
+        color: #0366d6;
+        border-bottom: 1px solid #eaecef;
+        padding-bottom: 10px;
+      }
+      h2 {
+        color: #24292e;
+        margin-top: 24px;
+      }
+      label {
+        display: block;
+        margin-top: 12px;
+        font-weight: 600;
+      }
+      input[type="text"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+      .checkbox-container {
+        margin-bottom: 5px;
+      }
+      .submit-btn {
+        background-color: #2ea44f;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .submit-btn:hover {
+        background-color: #2c974b;
+      }
+      .copy-btn {
+        background-color: #0366d6;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+      .copy-btn:hover {
+        background-color: #0256bf;
+      }
+      .summary-btn {
+        background-color: #6f42c1;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+      .summary-btn:hover {
+        background-color: #5a32a3;
+      }
+      .button-group {
+        margin-top: 20px;
+      }
+      #output {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f6f8fa;
+        white-space: pre-wrap;
+        display: none;
+      }
+      .section {
+        background-color: #f6f8fa;
+        padding: 15px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+      }
+      .output-mode-selector {
+        margin-bottom: 15px;
+        display: flex;
+        gap: 10px;
+      }
     </style>
-</head>
-<body>
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+  </head>
+  <body>
     <h1>Interactive PR Template</h1>
-    
+
     <form id="prForm">
-        <div class="section">
-            <h2>Basic Information</h2>
-            <label for="description">Description (summary of changes):</label>
-            <textarea id="description" name="description" required></textarea>
-            
-            <label for="issueLink">Related Issue:</label>
-            <input type="text" id="issueLink" name="issueLink" placeholder="Fixes #(issue) / Related to #(issue)">
+      <div class="section">
+        <h2>Basic Information</h2>
+        <label for="description">Description (summary of changes):</label>
+        <textarea id="description" name="description" required></textarea>
+
+        <label for="issueLink">Related Issue:</label>
+        <input
+          type="text"
+          id="issueLink"
+          name="issueLink"
+          placeholder="Fixes #(issue) / Related to #(issue)"
+        />
+      </div>
+
+      <div class="section">
+        <h2>Testing Performed</h2>
+        <textarea
+          id="testingDescription"
+          name="testingDescription"
+          placeholder="Describe the tests that you ran to verify your changes..."
+        ></textarea>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="unitTests" name="unitTests" />
+          <label for="unitTests" style="display: inline"
+            >Unit tests added/modified</label
+          >
         </div>
-        
-        <div class="section">
-            <h2>Testing Performed</h2>
-            <textarea id="testingDescription" name="testingDescription" placeholder="Describe the tests that you ran to verify your changes..."></textarea>
-            
-            <div class="checkbox-container">
-                <input type="checkbox" id="unitTests" name="unitTests">
-                <label for="unitTests" style="display: inline;">Unit tests added/modified</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="integrationTests" name="integrationTests">
-                <label for="integrationTests" style="display: inline;">Integration tests performed</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="manualTests" name="manualTests">
-                <label for="manualTests" style="display: inline;">Manual testing scenarios completed</label>
-            </div>
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="integrationTests"
+            name="integrationTests"
+          />
+          <label for="integrationTests" style="display: inline"
+            >Integration tests performed</label
+          >
         </div>
-        
-        <div class="section">
-            <h2>Types of Changes</h2>
-            <div class="checkbox-container">
-                <input type="checkbox" id="bugFix" name="changeType">
-                <label for="bugFix" style="display: inline;">Bug fix (non-breaking change which fixes an issue)</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="newFeature" name="changeType">
-                <label for="newFeature" style="display: inline;">New feature (non-breaking change which adds functionality)</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="breakingChange" name="changeType">
-                <label for="breakingChange" style="display: inline;">Breaking change (fix or feature that would cause existing functionality to change)</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="docUpdate" name="changeType">
-                <label for="docUpdate" style="display: inline;">Documentation update</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="perfImprovement" name="changeType">
-                <label for="perfImprovement" style="display: inline;">Performance improvement</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="codeCleanup" name="changeType">
-                <label for="codeCleanup" style="display: inline;">Code cleanup or refactor</label>
-            </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="manualTests" name="manualTests" />
+          <label for="manualTests" style="display: inline"
+            >Manual testing scenarios completed</label
+          >
         </div>
-        
-        <div class="section">
-            <h2>PR Checklist</h2>
-            
-            <h3>Testing Checklist:</h3>
-            <div class="checkbox-container">
-                <input type="checkbox" id="testsCoverNew" name="testingChecklist">
-                <label for="testsCoverNew" style="display: inline;">Unit tests cover new functionality</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="testsCoverEdge" name="testingChecklist">
-                <label for="testsCoverEdge" style="display: inline;">Unit tests cover edge cases</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="testsCoverError" name="testingChecklist">
-                <label for="testsCoverError" style="display: inline;">Unit tests cover error conditions</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="integrationTestsUpdated" name="testingChecklist">
-                <label for="integrationTestsUpdated" style="display: inline;">Integration tests have been added/updated</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="coverageMaintained" name="testingChecklist">
-                <label for="coverageMaintained" style="display: inline;">Test coverage is maintained or improved</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="allTestsPass" name="testingChecklist">
-                <label for="allTestsPass" style="display: inline;">All new and existing tests pass</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="testsDocumented" name="testingChecklist">
-                <label for="testsDocumented" style="display: inline;">Tests are properly documented</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="mocksAppropriate" name="testingChecklist">
-                <label for="mocksAppropriate" style="display: inline;">Mocks are used appropriately</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="asyncTests" name="testingChecklist">
-                <label for="asyncTests" style="display: inline;">Async tests use pytest.mark.asyncio</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="fixturesScoped" name="testingChecklist">
-                <label for="fixturesScoped" style="display: inline;">Test fixtures are properly scoped</label>
-            </div>
-            
-            <h3>Quality Checklist:</h3>
-            <div class="checkbox-container">
-                <input type="checkbox" id="readContributing" name="qualityChecklist">
-                <label for="readContributing" style="display: inline;">I have read the CONTRIBUTING.md document</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="followsStandards" name="qualityChecklist">
-                <label for="followsStandards" style="display: inline;">My code follows the project's coding standards</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="properlyTyped" name="qualityChecklist">
-                <label for="properlyTyped" style="display: inline;">Code is properly typed with type hints</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="docstringsGoogle" name="qualityChecklist">
-                <label for="docstringsGoogle" style="display: inline;">Docstrings follow Google style</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="noWarnings" name="qualityChecklist">
-                <label for="noWarnings" style="display: inline;">No new warnings are introduced</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="passesLinters" name="qualityChecklist">
-                <label for="passesLinters" style="display: inline;">Code passes all linters (black, isort, flake8)</label>
-            </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="docsUpdated" name="qualityChecklist">
-                <label for="docsUpdated" style="display: inline;">Documentation has been updated (if necessary)</label>
-            </div>
+      </div>
+
+      <div class="section">
+        <h2>Types of Changes</h2>
+        <div class="checkbox-container">
+          <input type="checkbox" id="bugFix" name="changeType" />
+          <label for="bugFix" style="display: inline"
+            >Bug fix (non-breaking change which fixes an issue)</label
+          >
         </div>
-        
-        <div class="section">
-            <h2>Dependencies</h2>
-            <textarea id="dependencies" name="dependencies" placeholder="List any dependencies that need to be updated, for example:
+        <div class="checkbox-container">
+          <input type="checkbox" id="newFeature" name="changeType" />
+          <label for="newFeature" style="display: inline"
+            >New feature (non-breaking change which adds functionality)</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="breakingChange" name="changeType" />
+          <label for="breakingChange" style="display: inline"
+            >Breaking change (fix or feature that would cause existing
+            functionality to change)</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="docUpdate" name="changeType" />
+          <label for="docUpdate" style="display: inline"
+            >Documentation update</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="perfImprovement" name="changeType" />
+          <label for="perfImprovement" style="display: inline"
+            >Performance improvement</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="codeCleanup" name="changeType" />
+          <label for="codeCleanup" style="display: inline"
+            >Code cleanup or refactor</label
+          >
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>PR Checklist</h2>
+
+        <h3>Testing Checklist:</h3>
+        <div class="checkbox-container">
+          <input type="checkbox" id="testsCoverNew" name="testingChecklist" />
+          <label for="testsCoverNew" style="display: inline"
+            >Unit tests cover new functionality</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="testsCoverEdge" name="testingChecklist" />
+          <label for="testsCoverEdge" style="display: inline"
+            >Unit tests cover edge cases</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="testsCoverError" name="testingChecklist" />
+          <label for="testsCoverError" style="display: inline"
+            >Unit tests cover error conditions</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="integrationTestsUpdated"
+            name="testingChecklist"
+          />
+          <label for="integrationTestsUpdated" style="display: inline"
+            >Integration tests have been added/updated</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="coverageMaintained"
+            name="testingChecklist"
+          />
+          <label for="coverageMaintained" style="display: inline"
+            >Test coverage is maintained or improved</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="allTestsPass" name="testingChecklist" />
+          <label for="allTestsPass" style="display: inline"
+            >All new and existing tests pass</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="testsDocumented" name="testingChecklist" />
+          <label for="testsDocumented" style="display: inline"
+            >Tests are properly documented</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="mocksAppropriate"
+            name="testingChecklist"
+          />
+          <label for="mocksAppropriate" style="display: inline"
+            >Mocks are used appropriately</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="asyncTests" name="testingChecklist" />
+          <label for="asyncTests" style="display: inline"
+            >Async tests use pytest.mark.asyncio</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="fixturesScoped" name="testingChecklist" />
+          <label for="fixturesScoped" style="display: inline"
+            >Test fixtures are properly scoped</label
+          >
+        </div>
+
+        <h3>Quality Checklist:</h3>
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="readContributing"
+            name="qualityChecklist"
+          />
+          <label for="readContributing" style="display: inline"
+            >I have read the CONTRIBUTING.md document</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="followsStandards"
+            name="qualityChecklist"
+          />
+          <label for="followsStandards" style="display: inline"
+            >My code follows the project's coding standards</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="properlyTyped" name="qualityChecklist" />
+          <label for="properlyTyped" style="display: inline"
+            >Code is properly typed with type hints</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="docstringsGoogle"
+            name="qualityChecklist"
+          />
+          <label for="docstringsGoogle" style="display: inline"
+            >Docstrings follow Google style</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="noWarnings" name="qualityChecklist" />
+          <label for="noWarnings" style="display: inline"
+            >No new warnings are introduced</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="passesLinters" name="qualityChecklist" />
+          <label for="passesLinters" style="display: inline"
+            >Code passes all linters (black, isort, flake8)</label
+          >
+        </div>
+        <div class="checkbox-container">
+          <input type="checkbox" id="docsUpdated" name="qualityChecklist" />
+          <label for="docsUpdated" style="display: inline"
+            >Documentation has been updated (if necessary)</label
+          >
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Dependencies</h2>
+        <textarea
+          id="dependencies"
+          name="dependencies"
+          placeholder="List any dependencies that need to be updated, for example:
 - Added new dependency X version Y
-- Updated dependency Z to version W"></textarea>
-        </div>
-        
-        <div class="section">
-            <h2>Additional Notes</h2>
-            <textarea id="additionalNotes" name="additionalNotes" placeholder="Add any additional information that reviewers should know, such as:
+- Updated dependency Z to version W"
+        ></textarea>
+      </div>
+
+      <div class="section">
+        <h2>Additional Notes</h2>
+        <textarea
+          id="additionalNotes"
+          name="additionalNotes"
+          placeholder="Add any additional information that reviewers should know, such as:
 - Screenshots
 - Examples
 - Special deployment considerations
-- Areas that need particular review attention"></textarea>
-        </div>
-        
-        <div class="button-group">
-            <button type="button" id="generateBtn" class="copy-btn">Generate Markdown</button>
-            <button type="button" id="summaryBtn" class="summary-btn">Short Summary</button>
-            <button type="button" id="copyBtn" class="copy-btn" style="display: none;">Copy to Clipboard</button>
-            <button type="reset" class="submit-btn">Clear Form</button>
-        </div>
+- Areas that need particular review attention"
+        ></textarea>
+      </div>
+
+      <div class="button-group">
+        <button type="button" id="generateBtn" class="copy-btn">
+          Generate Markdown
+        </button>
+        <button type="button" id="summaryBtn" class="summary-btn">
+          Short Summary
+        </button>
+        <button
+          type="button"
+          id="copyBtn"
+          class="copy-btn"
+          style="display: none"
+        >
+          Copy to Clipboard
+        </button>
+        <button type="reset" class="submit-btn">Clear Form</button>
+      </div>
     </form>
-    
+
     <pre id="output"></pre>
-    
+
     <script>
-        document.getElementById('generateBtn').addEventListener('click', function() {
-            // Get form values
-            const description = document.getElementById('description').value;
-            const issueLink = document.getElementById('issueLink').value;
-            const testingDescription = document.getElementById('testingDescription').value;
-            
-            // Get testing checkboxes
-            const unitTests = document.getElementById('unitTests').checked ? 'x' : ' ';
-            const integrationTests = document.getElementById('integrationTests').checked ? 'x' : ' ';
-            const manualTests = document.getElementById('manualTests').checked ? 'x' : ' ';
-            
-            // Get change types
-            const bugFix = document.getElementById('bugFix').checked ? 'x' : ' ';
-            const newFeature = document.getElementById('newFeature').checked ? 'x' : ' ';
-            const breakingChange = document.getElementById('breakingChange').checked ? 'x' : ' ';
-            const docUpdate = document.getElementById('docUpdate').checked ? 'x' : ' ';
-            const perfImprovement = document.getElementById('perfImprovement').checked ? 'x' : ' ';
-            const codeCleanup = document.getElementById('codeCleanup').checked ? 'x' : ' ';
-            
-            // Get testing checklist
-            const testsCoverNew = document.getElementById('testsCoverNew').checked ? 'x' : ' ';
-            const testsCoverEdge = document.getElementById('testsCoverEdge').checked ? 'x' : ' ';
-            const testsCoverError = document.getElementById('testsCoverError').checked ? 'x' : ' ';
-            const integrationTestsUpdated = document.getElementById('integrationTestsUpdated').checked ? 'x' : ' ';
-            const coverageMaintained = document.getElementById('coverageMaintained').checked ? 'x' : ' ';
-            const allTestsPass = document.getElementById('allTestsPass').checked ? 'x' : ' ';
-            const testsDocumented = document.getElementById('testsDocumented').checked ? 'x' : ' ';
-            const mocksAppropriate = document.getElementById('mocksAppropriate').checked ? 'x' : ' ';
-            const asyncTests = document.getElementById('asyncTests').checked ? 'x' : ' ';
-            const fixturesScoped = document.getElementById('fixturesScoped').checked ? 'x' : ' ';
-            
-            // Get quality checklist
-            const readContributing = document.getElementById('readContributing').checked ? 'x' : ' ';
-            const followsStandards = document.getElementById('followsStandards').checked ? 'x' : ' ';
-            const properlyTyped = document.getElementById('properlyTyped').checked ? 'x' : ' ';
-            const docstringsGoogle = document.getElementById('docstringsGoogle').checked ? 'x' : ' ';
-            const noWarnings = document.getElementById('noWarnings').checked ? 'x' : ' ';
-            const passesLinters = document.getElementById('passesLinters').checked ? 'x' : ' ';
-            const docsUpdated = document.getElementById('docsUpdated').checked ? 'x' : ' ';
-            
-            // Get dependencies and additional notes
-            const dependencies = document.getElementById('dependencies').value;
-            const additionalNotes = document.getElementById('additionalNotes').value;
-            
-            // Generate markdown
-            const markdown = `## Description
+      document
+        .getElementById("generateBtn")
+        .addEventListener("click", function () {
+          // Get form values
+          const description = document.getElementById("description").value;
+          const issueLink = document.getElementById("issueLink").value;
+          const testingDescription =
+            document.getElementById("testingDescription").value;
+
+          // Get testing checkboxes
+          const unitTests = document.getElementById("unitTests").checked
+            ? "x"
+            : " ";
+          const integrationTests = document.getElementById("integrationTests")
+            .checked
+            ? "x"
+            : " ";
+          const manualTests = document.getElementById("manualTests").checked
+            ? "x"
+            : " ";
+
+          // Get change types
+          const bugFix = document.getElementById("bugFix").checked ? "x" : " ";
+          const newFeature = document.getElementById("newFeature").checked
+            ? "x"
+            : " ";
+          const breakingChange = document.getElementById("breakingChange")
+            .checked
+            ? "x"
+            : " ";
+          const docUpdate = document.getElementById("docUpdate").checked
+            ? "x"
+            : " ";
+          const perfImprovement = document.getElementById("perfImprovement")
+            .checked
+            ? "x"
+            : " ";
+          const codeCleanup = document.getElementById("codeCleanup").checked
+            ? "x"
+            : " ";
+
+          // Get testing checklist
+          const testsCoverNew = document.getElementById("testsCoverNew").checked
+            ? "x"
+            : " ";
+          const testsCoverEdge = document.getElementById("testsCoverEdge")
+            .checked
+            ? "x"
+            : " ";
+          const testsCoverError = document.getElementById("testsCoverError")
+            .checked
+            ? "x"
+            : " ";
+          const integrationTestsUpdated = document.getElementById(
+            "integrationTestsUpdated"
+          ).checked
+            ? "x"
+            : " ";
+          const coverageMaintained = document.getElementById(
+            "coverageMaintained"
+          ).checked
+            ? "x"
+            : " ";
+          const allTestsPass = document.getElementById("allTestsPass").checked
+            ? "x"
+            : " ";
+          const testsDocumented = document.getElementById("testsDocumented")
+            .checked
+            ? "x"
+            : " ";
+          const mocksAppropriate = document.getElementById("mocksAppropriate")
+            .checked
+            ? "x"
+            : " ";
+          const asyncTests = document.getElementById("asyncTests").checked
+            ? "x"
+            : " ";
+          const fixturesScoped = document.getElementById("fixturesScoped")
+            .checked
+            ? "x"
+            : " ";
+
+          // Get quality checklist
+          const readContributing = document.getElementById("readContributing")
+            .checked
+            ? "x"
+            : " ";
+          const followsStandards = document.getElementById("followsStandards")
+            .checked
+            ? "x"
+            : " ";
+          const properlyTyped = document.getElementById("properlyTyped").checked
+            ? "x"
+            : " ";
+          const docstringsGoogle = document.getElementById("docstringsGoogle")
+            .checked
+            ? "x"
+            : " ";
+          const noWarnings = document.getElementById("noWarnings").checked
+            ? "x"
+            : " ";
+          const passesLinters = document.getElementById("passesLinters").checked
+            ? "x"
+            : " ";
+          const docsUpdated = document.getElementById("docsUpdated").checked
+            ? "x"
+            : " ";
+
+          // Get dependencies and additional notes
+          const dependencies = document.getElementById("dependencies").value;
+          const additionalNotes =
+            document.getElementById("additionalNotes").value;
+
+          // Generate markdown
+          const markdown = `## Description
 ${description}
 
 ## Related Issue
@@ -365,92 +554,103 @@ ${dependencies}
 
 ## Additional Notes
 ${additionalNotes}`;
-            
-            // Display the output
-            const output = document.getElementById('output');
-            output.textContent = markdown;
-            output.style.display = 'block';
-            
-            // Show copy button
-            document.getElementById('copyBtn').style.display = 'inline-block';
+
+          // Display the output
+          const output = document.getElementById("output");
+          output.textContent = markdown;
+          output.style.display = "block";
+
+          // Show copy button
+          document.getElementById("copyBtn").style.display = "inline-block";
         });
-        
-        document.getElementById('summaryBtn').addEventListener('click', function() {
-            // Get form values
-            const description = document.getElementById('description').value;
-            const issueLink = document.getElementById('issueLink').value;
-            
-            // Get change types
-            const changeTypes = [];
-            if (document.getElementById('bugFix').checked) changeTypes.push("Bug fix");
-            if (document.getElementById('newFeature').checked) changeTypes.push("New feature");
-            if (document.getElementById('breakingChange').checked) changeTypes.push("Breaking change");
-            if (document.getElementById('docUpdate').checked) changeTypes.push("Doc update");
-            if (document.getElementById('perfImprovement').checked) changeTypes.push("Performance improvement");
-            if (document.getElementById('codeCleanup').checked) changeTypes.push("Code cleanup/refactor");
-            
-            // Get testing info
-            const testingInfo = [];
-            if (document.getElementById('unitTests').checked) testingInfo.push("Unit tests");
-            if (document.getElementById('integrationTests').checked) testingInfo.push("Integration tests");
-            if (document.getElementById('manualTests').checked) testingInfo.push("Manual tests");
-            
-            // Get dependencies
-            const dependencies = document.getElementById('dependencies').value;
-            
-            // Generate summary
-            let summary = `${description}\n\n`;
-            
-            if (issueLink) {
-                summary += `Related: ${issueLink}\n\n`;
-            }
-            
-            if (changeTypes.length > 0) {
-                summary += `Type: ${changeTypes.join(", ")}\n\n`;
-            }
-            
-            if (testingInfo.length > 0) {
-                summary += `Testing: ${testingInfo.join(", ")}\n\n`;
-            }
-            
-            if (dependencies) {
-                summary += `Dependencies: ${dependencies}\n\n`;
-            }
-            
-            // Display the output
-            const output = document.getElementById('output');
-            output.textContent = summary;
-            output.style.display = 'block';
-            
-            // Show copy button
-            document.getElementById('copyBtn').style.display = 'inline-block';
+
+      document
+        .getElementById("summaryBtn")
+        .addEventListener("click", function () {
+          // Get form values
+          const description = document.getElementById("description").value;
+          const issueLink = document.getElementById("issueLink").value;
+
+          // Get change types
+          const changeTypes = [];
+          if (document.getElementById("bugFix").checked)
+            changeTypes.push("Bug fix");
+          if (document.getElementById("newFeature").checked)
+            changeTypes.push("New feature");
+          if (document.getElementById("breakingChange").checked)
+            changeTypes.push("Breaking change");
+          if (document.getElementById("docUpdate").checked)
+            changeTypes.push("Doc update");
+          if (document.getElementById("perfImprovement").checked)
+            changeTypes.push("Performance improvement");
+          if (document.getElementById("codeCleanup").checked)
+            changeTypes.push("Code cleanup/refactor");
+
+          // Get testing info
+          const testingInfo = [];
+          if (document.getElementById("unitTests").checked)
+            testingInfo.push("Unit tests");
+          if (document.getElementById("integrationTests").checked)
+            testingInfo.push("Integration tests");
+          if (document.getElementById("manualTests").checked)
+            testingInfo.push("Manual tests");
+
+          // Get dependencies
+          const dependencies = document.getElementById("dependencies").value;
+
+          // Generate summary
+          let summary = `${description}\n\n`;
+
+          if (issueLink) {
+            summary += `Related: ${issueLink}\n\n`;
+          }
+
+          if (changeTypes.length > 0) {
+            summary += `Type: ${changeTypes.join(", ")}\n\n`;
+          }
+
+          if (testingInfo.length > 0) {
+            summary += `Testing: ${testingInfo.join(", ")}\n\n`;
+          }
+
+          if (dependencies) {
+            summary += `Dependencies: ${dependencies}\n\n`;
+          }
+
+          // Display the output
+          const output = document.getElementById("output");
+          output.textContent = summary;
+          output.style.display = "block";
+
+          // Show copy button
+          document.getElementById("copyBtn").style.display = "inline-block";
         });
-        
-        document.getElementById('copyBtn').addEventListener('click', function() {
-            const output = document.getElementById('output');
-            
-            // Create a temporary textarea element
-            const textarea = document.createElement('textarea');
-            textarea.value = output.textContent;
-            document.body.appendChild(textarea);
-            
-            // Select and copy the text
-            textarea.select();
-            document.execCommand('copy');
-            
-            // Remove the temporary textarea
-            document.body.removeChild(textarea);
-            
-            // Change button text temporarily
-            const copyBtn = document.getElementById('copyBtn');
-            const originalText = copyBtn.textContent;
-            copyBtn.textContent = 'Copied!';
-            
-            // Revert button text after a delay
-            setTimeout(function() {
-                copyBtn.textContent = originalText;
-            }, 2000);
-        });
+
+      document.getElementById("copyBtn").addEventListener("click", function () {
+        const output = document.getElementById("output");
+
+        // Create a temporary textarea element
+        const textarea = document.createElement("textarea");
+        textarea.value = output.textContent;
+        document.body.appendChild(textarea);
+
+        // Select and copy the text
+        textarea.select();
+        document.execCommand("copy");
+
+        // Remove the temporary textarea
+        document.body.removeChild(textarea);
+
+        // Change button text temporarily
+        const copyBtn = document.getElementById("copyBtn");
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = "Copied!";
+
+        // Revert button text after a delay
+        setTimeout(function () {
+          copyBtn.textContent = originalText;
+        }, 2000);
+      });
     </script>
-</body>
+  </body>
 </html>
